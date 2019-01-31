@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
               title: new Text("open the first page"),
               trailing: new Icon(Icons.arrow_right),
               onTap: () {
-                Navigator.of(context).pop(); //点击后收起侧边栏
+//                Navigator.of(context).pop(); //点击后收起侧边栏
                 Navigator.of(context).push(new MaterialPageRoute(
                   builder: (BuildContext context) =>
                   new OtherPage('First Page'))); //进入OtherPage页面，传入参数First Page
