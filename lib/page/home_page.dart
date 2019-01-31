@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_learn/page/other_page.dart';
+import 'package:flutter_learn/page/english_words.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -70,6 +71,13 @@ class _HomePageState extends State<HomePage> {
               onTap: () {
 //                  Navigator.of(context).pop();
                 Navigator.push(context, new OtherPageRoute("second page"));
+              },
+            ),
+            new ListTile(
+              title: new Text("open the english words page"),
+              trailing: new Icon(Icons.arrow_right),
+              onTap: () {
+                Navigator.push(context, new EnglishWordsPageRoute());
               },
             ),
           ],
