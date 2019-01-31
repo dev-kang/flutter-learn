@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_learn/page/other_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -25,49 +26,51 @@ class _HomePageState extends State<HomePage> {
                 currentAccountPicture: new GestureDetector(
                   onTap: () => print('You click me!'),
                   child: new CircleAvatar(
-                    backgroundImage: new NetworkImage("https://www.gravatar.com/avatar/default.jpg") // 设置头像,
-                  ),
+                      backgroundImage: new NetworkImage(
+                          "https://www.gravatar.com/avatar/default.jpg") // 设置头像,
+                      ),
                 ),
                 otherAccountsPictures: <Widget>[
                   new GestureDetector(
                     onTap: () => print('You click me!'),
                     child: new CircleAvatar(
-                      backgroundImage: new NetworkImage("https://www.gravatar.com/avatar/default.jpg") // 设置头像,
-                    ),
+                        backgroundImage: new NetworkImage(
+                            "https://www.gravatar.com/avatar/default.jpg") // 设置头像,
+                        ),
                   ),
-
                   new GestureDetector(
                     onTap: () => print('You click me!'),
                     child: new CircleAvatar(
-                      backgroundImage: new NetworkImage("https://www.gravatar.com/avatar/default.jpg") // 设置头像,
-                    ),
+                        backgroundImage: new NetworkImage(
+                            "https://www.gravatar.com/avatar/default.jpg") // 设置头像,
+                        ),
                   ),
-
                   new GestureDetector(
                     onTap: () => print('You click me!'),
                     child: new CircleAvatar(
-                      backgroundImage: new NetworkImage("https://www.gravatar.com/avatar/default.jpg") // 设置头像,
-                    ),
+                        backgroundImage: new NetworkImage(
+                            "https://www.gravatar.com/avatar/default.jpg") // 设置头像,
+                        ),
                   ),
                 ],
               ),
-              
               new ListTile(
-                title: new Text("the first function"),
+                title: new Text("open the first page"),
                 trailing: new Icon(Icons.arrow_right),
                 onTap: () {
-                  Navigator.of(context).pop;
+                  Navigator.of(context).pop(); //点击后收起侧边栏
+                  Navigator.of(context).push(new MaterialPageRoute(
+                      builder: (BuildContext context) => new OtherPage('First Page'))); //进入OtherPage页面，传入参数First Page
                 },
               ),
-              
               new ListTile(
-                title: new Text("the second function"),
+                title: new Text("open the second page"),
                 trailing: new Icon(Icons.arrow_right),
                 onTap: () {
-                  Navigator.of(context).pop;
+//                  Navigator.of(context).pop();
+                  Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new OtherPage('Second Page')));
                 },
               ),
-              
             ],
           ),
         ),
