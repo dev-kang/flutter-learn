@@ -30,6 +30,29 @@ class RandomWordsState extends State<RandomWords> {
   final _suggestions = <WordPair>[];
   final _saved = new Set<WordPair>();
   final _biggerFont = const TextStyle(fontSize: 18.0);
+
+  int _page = 1;
+  bool isLoading = false; //是否正在加载数据
+
+  ScrollController _scrollController = ScrollController(); //listview的控制器
+
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getData();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
+        print('滑动到了最底部');
+        _getMore();
+      }
+    });
+  }
+  
+  
   
   @override
   Widget build(BuildContext context) {
@@ -86,11 +109,75 @@ class RandomWordsState extends State<RandomWords> {
       setState(() {
         _suggestions.clear();
         _saved.clear();
+        _suggestions.addAll(generateWordPairs().take(10));
 //        list = List.generate(20, (i) => '哈喽,我是新刷新的 $i');
       });
     });
   }
 
+  /**
+   * 上拉加载更多
+   */
+  Future _getMore() async {
+    if (!isLoading) {
+      setState(() {
+        isLoading = true;
+      });
+      await Future.delayed(Duration(seconds: 1), () {
+        print('加载更多');
+        setState(() {
+          _suggestions.addAll(generateWordPairs().take(10));
+          _page++;
+          print('第$_page次上拉来的数据');
+          isLoading = false;
+        });
+      });
+    }
+  }
+
+  /**
+   * 加载更多时显示的组件,给用户提示
+   */
+  Widget _getMoreWidget() {
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.all(10.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              '加载中...',
+              style: TextStyle(fontSize: 16.0),
+            ),
+            CircularProgressIndicator(
+              strokeWidth: 1.0,
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _scrollController.dispose();
+  }
+  /**
+   * 初始化list数据 加延时模仿网络请求
+   */
+  Future getData() async {
+    await Future.delayed(Duration(seconds: 2), () {
+      setState(() {
+        _suggestions.addAll(generateWordPairs().take(10));
+      });
+    });
+  }
+ 
   
   Widget _buildSuggestions() {
     return new ListView.builder(
@@ -98,20 +185,27 @@ class RandomWordsState extends State<RandomWords> {
       itemBuilder: (context, i) {
         if (i.isOdd) return new Divider();
         final index = i ~/ 2;
-        if (index >= _suggestions.length) {
-          _suggestions.addAll(generateWordPairs().take(10));
-        }
         print(index);
         return _buildRow(_suggestions[index], index);
-      });
+      },
+      itemCount: _suggestions.length * 2,
+      controller:_scrollController,
+      );
+     
+    
   }
   
   Widget _buildRow(WordPair pair, index) {
     final alreadySaved = _saved.contains(pair);
     
+    
+    if (index >= _suggestions.length - 1) {
+      return _getMoreWidget();
+    }
+    
     return new ListTile(
       title: new Text(
-        index.toString() + ":" + pair.asPascalCase,
+        _suggestions.length.toString() + "-" +index.toString() + ":" + pair.asPascalCase,
         style: _biggerFont,
       ),
       trailing: new Icon(
